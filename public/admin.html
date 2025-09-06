@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Talaba Ma'lumotlari</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        dark: '#1F2937',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center text-dark mb-2">Talaba Ma'lumotlari Boshqaruvi</h1>
+        <p class="text-center text-gray-600 mb-8">Barcha ro'yxatdan o'tgan talabalar</p>
+        
+        <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-semibold text-dark">Talabalar Ro'yxati</h2>
+                <div class="flex items-center">
+                    <input type="text" id="searchInput" placeholder="Qidirish..." class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2">
+                    <button id="refreshButton" class="bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        Yangilash
+                    </button>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                №
+                            </th>
+                            <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Rasm
+                            </th>
+                            <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Familiya Ism
+                            </th>
+                            <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Tug'ilgan sana
+                            </th>
+                            <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Telefon
+                            </th>
+                            <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Harakatlar
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTableBody">
+                        <!-- Talabalar ma'lumotlari JavaScript orqali to'ldiriladi -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="pagination" class="mt-4 flex justify-center">
+                <!-- Pagination JavaScript orqali to'ldiriladi -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Talaba ma'lumotlari modali -->
+    <div id="studentModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-3/4 lg:w-2/3 max-h-screen overflow-y-auto">
+            <div class="px-6 py-4 border-b">
+                <h2 class="text-2xl font-semibold text-dark">Talaba Ma'lumotlari</h2>
+                <button id="closeModal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="px-6 py-4" id="modalContent">
+                <!-- Ma'lumotlar JavaScript orqali to'ldiriladi -->
+            </div>
+            <div class="px-6 py-4 border-t flex justify-end">
+                <button id="closeModalButton" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Yopish
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        const studentsPerPage = 10;
+        let allStudents = [];
+        let filteredStudents = [];
+
+        // Sahifa yuklanganda talabalarni yuklash
+        document.addEventListener('DOMContentLoaded', loadStudents);
+
+        // Yangilash tugmasi
+        document.getElementById('refreshButton').addEventListener('click', loadStudents);
+
+        // Qidiruv maydoni
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            filteredStudents = allStudents.filter(student => 
+                student.lastName.toLowerCase().includes(searchTerm) ||
+                student.firstName.toLowerCase().includes(searchTerm) ||
+                student.middleName.toLowerCase().includes(searchTerm) ||
+                student.idNumber.toLowerCase().includes(searchTerm) ||
+                student.studentPhone.toLowerCase().includes(searchTerm)
+            );
+            currentPage = 1;
+            renderStudents();
+        });
+
+        // Modalni yopish
+        document.getElementById('closeModal').addEventListener('click', closeModal);
+        document.getElementById('closeModalButton').addEventListener('click', closeModal);
+
+        // Talabalarni yuklash
+        async function loadStudents() {
+            try {
+                const response = await fetch('/api/students');
+                allStudents = await response.json();
+                filteredStudents = [...allStudents];
+                renderStudents();
+            } catch (error) {
+                console.error('Xatolik:', error);
+                alert('Talabalarni yuklab bo\'lmadi');
+            }
+        }
+
+        // Talabalarni jadvalga chiqarish
+        function renderStudents() {
+            const tableBody = document.getElementById('studentsTableBody');
+            const pagination = document.getElementById('pagination');
+            
+            // Pagination hisoblash
+            const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
+            const startIndex = (currentPage - 1) * studentsPerPage;
+            const endIndex = Math.min(startIndex + studentsPerPage, filteredStudents.length);
+            const pageStudents = filteredStudents.slice(startIndex, endIndex);
+            
+            // Jadvalni to'ldirish
+            tableBody.innerHTML = '';
+            pageStudents.forEach((student, index) => {
+                const row = document.createElement('tr');
+                row.className = index % 2 === 0 ? 'bg-gray-50' : 'bg-white';
+                
+                row.innerHTML = `
+                    <td class="py-3 px-4 border-b border-gray-200">${startIndex + index + 1}</td>
+                    <td class="py-3 px-4 border-b border-gray-200">
+                        <img src="${student.photo}" alt="Rasm" class="w-12 h-12 rounded-full object-cover">
+                    </td>
+                    <td class="py-3 px-4 border-b border-gray-200">${student.lastName} ${student.firstName} ${student.middleName}</td>
+                    <td class="py-3 px-4 border-b border-gray-200">${new Date(student.birthDate).toLocaleDateString()}</td>
+                    <td class="py-3 px-4 border-b border-gray-200">${student.studentPhone}</td>
+                    <td class="py-3 px-4 border-b border-gray-200">
+                        <button onclick="viewStudent('${student._id}')" class="bg-primary hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs">
+                            Ko'rish
+                        </button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Pagination yaratish
+            pagination.innerHTML = '';
+            if (totalPages > 1) {
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageButton = document.createElement('button');
+                    pageButton.className = `mx-1 px-3 py-1 rounded ${i === currentPage ? 'bg-primary text-white' : 'bg-gray-200 text-gray-700'}`;
+                    pageButton.textContent = i;
+                    pageButton.addEventListener('click', () => {
+                        currentPage = i;
+                        renderStudents();
+                    });
+                    pagination.appendChild(pageButton);
+                }
+            }
+        }
+
+        // Talaba ma'lumotlarini ko'rish
+        async function viewStudent(studentId) {
+            try {
+                const response = await fetch(`/api/students/${studentId}`);
+                const student = await response.json();
+                
+                const modalContent = document.getElementById('modalContent');
+                modalContent.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div class="col-span-1 flex justify-center">
+                            <img src="${student.photo}" alt="Talaba rasmi" class="w-48 h-48 rounded-full object-cover shadow-md">
+                        </div>
+                        <div class="col-span-2">
+                            <h3 class="text-2xl font-bold text-dark mb-2">${student.lastName} ${student.firstName} ${student.middleName}</h3>
+                            <p class="text-gray-600"><span class="font-semibold">Tug'ilgan sana:</span> ${new Date(student.birthDate).toLocaleDateString()}</p>
+                            <p class="text-gray-600"><span class="font-semibold">Millati:</span> ${student.nationality}</p>
+                            <p class="text-gray-600"><span class="font-semibold">ID raqami:</span> ${student.idNumber}</p>
+                            <p class="text-gray-600"><span class="font-semibold">JSHR raqami:</span> ${student.jshrNumber}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="text-lg font-semibold text-dark mb-2">Aloqa ma'lumotlari</h4>
+                            <p class="text-gray-600"><span class="font-semibold">Tel:</span> ${student.studentPhone}</p>
+                            ${student.fatherPhone ? `<p class="text-gray-600"><span class="font-semibold">Otasining tel:</span> ${student.fatherPhone}</p>` : ''}
+                            ${student.motherPhone ? `<p class="text-gray-600"><span class="font-semibold">Onasining tel:</span> ${student.motherPhone}</p>` : ''}
+                            ${student.fatherJob ? `<p class="text-gray-600"><span class="font-semibold">Otasining ishi:</span> ${student.fatherJob}</p>` : ''}
+                            ${student.motherJob ? `<p class="text-gray-600"><span class="font-semibold">Onasining ishi:</span> ${student.motherJob}</p>` : ''}
+                            ${student.fatherName ? `<p class="text-gray-600"><span class="font-semibold">Otaning ismi:</span> ${student.fatherName}</p>` : ''}
+${student.motherName ? `<p class="text-gray-600"><span class="font-semibold">Onaning ismi:</span> ${student.motherName}</p>` : ''}
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-dark mb-2">Manzil</h4>
+                            <p class="text-gray-600"><span class="font-semibold">Doimiy manzil:</span> ${student.permanentAddress}</p>
+                            ${student.temporaryAddress ? `<p class="text-gray-600"><span class="font-semibold">Vaqtincha manzil:</span> ${student.temporaryAddress}</p>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold text-dark mb-2">Qo'shimcha ma'lumotlar</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${student.graduatedSchool ? `<p class="text-gray-600"><span class="font-semibold">Tugatgan maktab:</span> ${student.graduatedSchool}</p>` : ''}
+                            ${student.maritalStatus ? `<p class="text-gray-600"><span class="font-semibold">Oilaviy ahvoli:</span> ${student.maritalStatus}</p>` : ''}
+                            ${student.certificates ? `<p class="text-gray-600"><span class="font-semibold">Sertifikatlar:</span> ${student.certificates}</p>` : ''}
+                            ${student.interests ? `<p class="text-gray-600"><span class="font-semibold">Qiziqishlar:</span> ${student.interests}</p>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold text-dark mb-2">Maxsus holatlar</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                            ${student.youthRegistry ? `<span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Yoshlar daftarida</span>` : ''}
+                            ${student.kindnessHouse ? `<span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Mehribonlik uyi</span>` : ''}
+                            ${student.divorcedParents ? `<span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">Ota-onasi ajrashgan</span>` : ''}
+                            ${student.womenRegistry ? `<span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded">Ayollar daftarida</span>` : ''}
+                            ${student.ironRegistry ? `<span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">Temir daftarda</span>` : ''}
+                            ${student.lostBreadwinner ? `<span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">Boquvchisiz</span>` : ''}
+                            ${student.trueOrphan ? `<span class="bg-pink-100 text-pink-800 text-xs font-medium px-2.5 py-0.5 rounded">Chin yetim</span>` : ''}
+                        </div>
+                    </div>
+                    
+                    ${student.guardianInfo ? `
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold text-dark mb-2">Boquvchi haqida</h4>
+                        <p class="text-gray-600">${student.guardianInfo}</p>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="text-sm text-gray-500 mt-6">
+                        <p>Ma'lumotlar ${new Date(student.createdAt).toLocaleString()} da saqlangan</p>
+                    </div>
+                `;
+                
+                document.getElementById('studentModal').classList.remove('hidden');
+            } catch (error) {
+                console.error('Xatolik:', error);
+                alert('Talaba ma\'lumotlarini yuklab bo\'lmadi');
+            }
+        }
+
+        // Modalni yopish
+        function closeModal() {
+            document.getElementById('studentModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
