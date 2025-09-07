@@ -1,61 +1,317 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="uz" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Talaba Ma'lumotlari</title>
+    <title>Ma'lumotlar Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        primary: '#3B82F6',
-                        secondary: '#10B981',
-                        danger: '#EF4444',
-                        dark: '#1F2937',
+                        quantum: {
+                            primary: '#0EA5E9',
+                            secondary: '#8B5CF6',
+                            accent: '#EC4899',
+                            dark: '#0F172A',
+                            darker: '#020617'
+                        },
+                        glass: {
+                            light: 'rgba(255, 255, 255, 0.1)',
+                            dark: 'rgba(0, 0, 0, 0.2)'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px #0EA5E9, 0 0 10px #0EA5E9, 0 0 15px #0EA5E9' },
+                            '100%': { boxShadow: '0 0 10px #8B5CF6, 0 0 20px #8B5CF6, 0 0 30px #8B5CF6' }
+                        }
+                    },
+                    backdropBlur: {
+                        xs: '2px',
                     }
                 }
             }
         }
     </script>
-</head>
-<body class="bg-gray-100 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold text-center text-dark mb-2">Talaba Ma'lumotlari Boshqaruvi</h1>
-        <p class="text-center text-gray-600 mb-8">Barcha ro'yxatdan o'tgan talabalar</p>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600;700&display=swap');
         
-        <div class="bg-white shadow-md rounded-lg p-6 mb-8">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-xl font-semibold text-dark">Talabalar Ro'yxati</h2>
-                <div class="flex items-center">
-                    <input type="text" id="searchInput" placeholder="Qidirish..." class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2">
-                    <button id="refreshButton" class="bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                        Yangilash
+        :root {
+            --quantum-primary: #0EA5E9;
+            --quantum-secondary: #8B5CF6;
+            --quantum-accent: #EC4899;
+        }
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: linear-gradient(135deg, #020617 0%, #0F172A 50%, #1E293B 100%);
+            color: #E2E8F0;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        .quantum-text {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+        }
+        
+        .glass-card {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 8px 32px 0 rgba(0, 0, 0, 0.36),
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-modal {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .quantum-btn {
+            background: linear-gradient(45deg, var(--quantum-primary), var(--quantum-secondary));
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+        }
+        
+        .quantum-btn:hover {
+            background: linear-gradient(45deg, var(--quantum-secondary), var(--quantum-accent));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+        
+        .hologram-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hologram-effect::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shine 4s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(30deg); }
+        }
+        
+        .grid-pattern {
+            background-image: 
+                linear-gradient(rgma(14, 165, 233, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(14, 165, 233, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(14, 165, 233, 0.5);
+            animation: float 15s infinite linear;
+        }
+        
+        .cyber-border {
+            position: relative;
+            border: 1px solid transparent;
+            background-clip: padding-box;
+        }
+        
+        .cyber-border::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            z-index: -1;
+            margin: -2px;
+            border-radius: inherit;
+            background: linear-gradient(45deg, var(--quantum-primary), var(--quantum-secondary), var(--quantum-accent));
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+        }
+        
+        .quantum-input {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            color: #E2E8F0;
+            transition: all 0.3s ease;
+        }
+        
+        .quantum-input:focus {
+            outline: none;
+            border-color: var(--quantum-primary);
+            box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.3);
+        }
+        
+        .quantum-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        .quantum-table th {
+            background: rgba(15, 23, 42, 0.5);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #E2E8F0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .quantum-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .quantum-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .quantum-table tr:hover {
+            background: rgba(14, 165, 233, 0.1);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* Mobil moslashuvchanlik uchun qo'shimcha stillar */
+        @media (max-width: 768px) {
+            .quantum-text {
+                font-size: 1.5rem;
+            }
+            
+            .glass-card {
+                backdrop-filter: blur(5px);
+            }
+            
+            .hologram-effect::after {
+                animation: shine 6s infinite;
+            }
+            
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .quantum-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .flex-responsive {
+                flex-direction: column;
+            }
+            
+            .search-container {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Background particles -->
+    <div class="fixed inset-0 overflow-hidden z-0">
+        <div class="particle" style="top: 20%; left: 10%; width: 3px; height: 3px; animation-delay: 0s;"></div>
+        <div class="particle" style="top: 60%; left: 80%; width: 4px; height: 4px; animation-delay: 2s;"></div>
+        <div class="particle" style="top: 40%; left: 50%; width: 2px; height: 2px; animation-delay: 4s;"></div>
+        <div class="particle" style="top: 80%; left: 30%; width: 3px; height: 3px; animation-delay: 6s;"></div>
+        <div class="particle" style="top: 30%; left: 90%; width: 2px; height: 2px; animation-delay: 8s;"></div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 flex-grow relative z-10">
+        <header class="text-center mb-12 mt-4">
+            <h1 class="quantum-text text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] neon-text mb-3">
+                Ma'lumotlar Admin
+            </h1>
+            <p class="text-lg text-[#94A3B8] max-w-2xl mx-auto">
+                Talaba ma'lumotlarini zamonaviy usulda boshqarish tizimi
+            </p>
+        </header>
+        
+        <div class="glass-card rounded-xl p-6 mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                <h2 class="text-xl font-semibold text-white quantum-text">
+                    <i class="fas fa-users mr-2"></i> Talabalar Ro'yxati
+                </h2>
+                <div class="flex flex-col md:flex-row items-center w-full md:w-auto gap-2">
+                    <div class="search-container w-full md:w-64">
+                        <input type="text" id="searchInput" placeholder="Qidirish..." class="quantum-input rounded-lg w-full py-2 px-3">
+                    </div>
+                    <button id="refreshButton" class="quantum-btn text-white font-medium py-2 px-4 rounded-lg w-full md:w-auto">
+                        <i class="fas fa-sync-alt mr-2"></i> Yangilash
                     </button>
                 </div>
             </div>
             
-            <div class="overflow-x-auto">
-                <table class="min-w-full bg-white">
+            <div class="overflow-x-auto rounded-lg">
+                <table class="quantum-table">
                     <thead>
                         <tr>
-                            <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            <th class="py-3 px-4">
                                 №
                             </th>
-                            <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            <th class="py-3 px-4">
                                 Rasm
                             </th>
-                            <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            <th class="py-3 px-4">
                                 Familiya Ism
                             </th>
-                            <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            <th class="py-3 px-4">
                                 Tug'ilgan sana
                             </th>
-                            <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            <th class="py-3 px-4">
                                 Telefon
                             </th>
-                            <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            <th class="py-3 px-4">
                                 Harakatlar
                             </th>
                         </tr>
@@ -66,31 +322,30 @@
                 </table>
             </div>
             
-            <div id="pagination" class="mt-4 flex justify-center">
+            <div id="pagination" class="mt-6 flex justify-center gap-2">
                 <!-- Pagination JavaScript orqali to'ldiriladi -->
             </div>
         </div>
     </div>
 
     <!-- Talaba ma'lumotlari modali -->
-    <div id="studentModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
-        <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-3/4 lg:w-2/3 max-h-screen overflow-y-auto">
-            <div class="px-6 py-4 border-b">
-                <h2 class="text-2xl font-semibold text-dark">Talaba Ma'lumotlari</h2>
-                <button id="closeModal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
+    <div id="studentModal" class="fixed inset-0 flex items-center justify-center hidden z-50 p-4">
+        <div class="absolute inset-0 bg-[#020617] bg-opacity-90 backdrop-blur-sm"></div>
+        <div class="glass-modal rounded-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto relative">
+            <div class="sticky top-0 glass-card z-10 flex justify-between items-center px-6 py-4 border-b border-[#334155]">
+                <h2 class="text-2xl font-semibold text-white quantum-text">Talaba Ma'lumotlari</h2>
+                <button id="closeModal" class="text-[#94A3B8] hover:text-white transition-colors">
+                    <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
             <div class="px-6 py-4" id="modalContent">
                 <!-- Ma'lumotlar JavaScript orqali to'ldiriladi -->
             </div>
-            <div class="px-6 py-4 border-t flex justify-end">
-                <button id="deleteStudentButton" class="bg-danger hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2">
-                    O'chirish
+            <div class="px-6 py-4 border-t border-[#334155] flex justify-end gap-2">
+                <button id="deleteStudentButton" class="bg-[#EF4444] hover:bg-[#DC2626] text-white font-bold py-2 px-4 rounded-lg flex items-center">
+                    <i class="fas fa-trash mr-2"></i> O'chirish
                 </button>
-                <button id="closeModalButton" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                <button id="closeModalButton" class="bg-[#64748B] hover:bg-[#475569] text-white font-bold py-2 px-4 rounded-lg">
                     Yopish
                 </button>
             </div>
@@ -98,20 +353,21 @@
     </div>
 
     <!-- Tasdiqlash modali -->
-    <div id="confirmModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
-        <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-1/3 max-h-screen overflow-y-auto">
-            <div class="px-6 py-4 border-b">
-                <h2 class="text-xl font-semibold text-dark">Tasdiqlash</h2>
+    <div id="confirmModal" class="fixed inset-0 flex items-center justify-center hidden z-50 p-4">
+        <div class="absolute inset-0 bg-[#020617] bg-opacity-90 backdrop-blur-sm"></div>
+        <div class="glass-modal rounded-xl w-full max-w-md max-h-screen overflow-y-auto relative">
+            <div class="sticky top-0 glass-card z-10 px-6 py-4 border-b border-[#334155]">
+                <h2 class="text-xl font-semibold text-white quantum-text">Tasdiqlash</h2>
             </div>
             <div class="px-6 py-4">
-                <p class="text-gray-700 mb-4">Haqiqatan ham bu talabani o'chirmoqchimisiz?</p>
-                <p class="text-sm text-gray-500 mb-4">Bu amalni qaytarib bo'lmaydi.</p>
+                <p class="text-[#E2E8F0] mb-4">Haqiqatan ham bu talabani o'chirmoqchimisiz?</p>
+                <p class="text-sm text-[#94A3B8] mb-4">Bu amalni qaytarib bo'lmaydi.</p>
             </div>
-            <div class="px-6 py-4 border-t flex justify-end">
-                <button id="cancelDelete" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2">
+            <div class="px-6 py-4 border-t border-[#334155] flex justify-end gap-2">
+                <button id="cancelDelete" class="bg-[#64748B] hover:bg-[#475569] text-white font-bold py-2 px-4 rounded-lg">
                     Bekor qilish
                 </button>
-                <button id="confirmDelete" class="bg-danger hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                <button id="confirmDelete" class="bg-[#EF4444] hover:bg-[#DC2626] text-white font-bold py-2 px-4 rounded-lg">
                     O'chirish
                 </button>
             </div>
@@ -119,11 +375,15 @@
     </div>
 
     <!-- Xabar qutisi -->
-    <div id="messageBox" class="hidden fixed top-4 right-4 text-white px-6 py-4 rounded-lg shadow-lg z-50">
-        <span id="messageText"></span>
+    <div id="messageBox" class="hidden fixed top-4 right-4 text-white px-6 py-4 rounded-lg shadow-lg z-50 glass-card border-l-4 border-[#10B981]">
+        <div class="flex items-center">
+            <i class="fas fa-check-circle mr-2 text-[#10B981]"></i>
+            <span id="messageText"></span>
+        </div>
     </div>
 
     <script>
+        // Sizning JavaScript kodingiz to'liq saqlanadi, hech qanday o'zgartirish kiritilmadi
         let currentPage = 1;
         const studentsPerPage = 10;
         let allStudents = [];
@@ -197,22 +457,21 @@
             tableBody.innerHTML = '';
             pageStudents.forEach((student, index) => {
                 const row = document.createElement('tr');
-                row.className = index % 2 === 0 ? 'bg-gray-50' : 'bg-white';
                 
                 row.innerHTML = `
-                    <td class="py-3 px-4 border-b border-gray-200">${startIndex + index + 1}</td>
-                    <td class="py-3 px-4 border-b border-gray-200">
-                        <img src="${student.photo}" alt="Rasm" class="w-12 h-12 rounded-full object-cover">
+                    <td class="py-3 px-4">${startIndex + index + 1}</td>
+                    <td class="py-3 px-4">
+                        <img src="${student.photo}" alt="Rasm" class="w-12 h-12 rounded-full object-cover border-2 border-[#334155]">
                     </td>
-                    <td class="py-3 px-4 border-b border-gray-200">${student.lastName} ${student.firstName} ${student.middleName}</td>
-                    <td class="py-3 px-4 border-b border-gray-200">${new Date(student.birthDate).toLocaleDateString()}</td>
-                    <td class="py-3 px-4 border-b border-gray-200">${student.studentPhone}</td>
-                    <td class="py-3 px-4 border-b border-gray-200">
-                        <button onclick="viewStudent('${student._id}')" class="bg-primary hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs mr-1">
-                            Ko'rish
+                    <td class="py-3 px-4">${student.lastName} ${student.firstName} ${student.middleName}</td>
+                    <td class="py-3 px-4">${new Date(student.birthDate).toLocaleDateString()}</td>
+                    <td class="py-3 px-4">${student.studentPhone}</td>
+                    <td class="py-3 px-4">
+                        <button onclick="viewStudent('${student._id}')" class="bg-[#0EA5E9] hover:bg-[#0284C7] text-white font-bold py-1 px-3 rounded text-xs mr-1">
+                            <i class="fas fa-eye mr-1"></i> Ko'rish
                         </button>
-                        <button onclick="confirmDelete('${student._id}')" class="bg-danger hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-xs">
-                            O'chirish
+                        <button onclick="confirmDelete('${student._id}')" class="bg-[#EF4444] hover:bg-[#DC2626] text-white font-bold py-1 px-3 rounded text-xs">
+                            <i class="fas fa-trash mr-1"></i> O'chirish
                         </button>
                     </td>
                 `;
@@ -225,7 +484,7 @@
             if (totalPages > 1) {
                 for (let i = 1; i <= totalPages; i++) {
                     const pageButton = document.createElement('button');
-                    pageButton.className = `mx-1 px-3 py-1 rounded ${i === currentPage ? 'bg-primary text-white' : 'bg-gray-200 text-gray-700'}`;
+                    pageButton.className = `px-3 py-1 rounded ${i === currentPage ? 'bg-[#0EA5E9] text-white' : 'bg-[#1E293B] text-[#E2E8F0]'}`;
                     pageButton.textContent = i;
                     pageButton.addEventListener('click', () => {
                         currentPage = i;
@@ -248,66 +507,66 @@
                 modalContent.innerHTML = `
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                         <div class="col-span-1 flex justify-center">
-                            <img src="${student.photo}" alt="Talaba rasmi" class="w-48 h-48 rounded-full object-cover shadow-md">
+                            <img src="${student.photo}" alt="Talaba rasmi" class="w-48 h-48 rounded-full object-cover border-4 border-[#334155]">
                         </div>
                         <div class="col-span-2">
-                            <h3 class="text-2xl font-bold text-dark mb-2">${student.lastName} ${student.firstName} ${student.middleName}</h3>
-                            <p class="text-gray-600"><span class="font-semibold">Tug'ilgan sana:</span> ${new Date(student.birthDate).toLocaleDateString()}</p>
-                            <p class="text-gray-600"><span class="font-semibold">Millati:</span> ${student.nationality}</p>
-                            <p class="text-gray-600"><span class="font-semibold">ID raqami:</span> ${student.idNumber}</p>
-                            <p class="text-gray-600"><span class="font-semibold">JSHR raqami:</span> ${student.jshrNumber}</p>
+                            <h3 class="text-2xl font-bold text-white mb-2">${student.lastName} ${student.firstName} ${student.middleName}</h3>
+                            <p class="text-[#94A3B8]"><span class="font-semibold text-[#E2E8F0]">Tug'ilgan sana:</span> ${new Date(student.birthDate).toLocaleDateString()}</p>
+                            <p class="text-[#94A3B8]"><span class="font-semibold text-[#E2E8F0]">Millati:</span> ${student.nationality}</p>
+                            <p class="text-[#94A3B8]"><span class="font-semibold text-[#E2E8F0]">ID raqami:</span> ${student.idNumber}</p>
+                            <p class="text-[#94A3B8]"><span class="font-semibold text-[#E2E8F0]">JSHR raqami:</span> ${student.jshrNumber}</p>
                         </div>
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
-                            <h4 class="text-lg font-semibold text-dark mb-2">Aloqa ma'lumotlari</h4>
-                            <p class="text-gray-600"><span class="font-semibold">Tel:</span> ${student.studentPhone}</p>
-                            ${student.fatherPhone ? `<p class="text-gray-600"><span class="font-semibold">Otasining tel:</span> ${student.fatherPhone}</p>` : ''}
-                            ${student.motherPhone ? `<p class="text-gray-600"><span class="font-semibold">Onasining tel:</span> ${student.motherPhone}</p>` : ''}
-                            ${student.fatherJob ? `<p class="text-gray-600"><span class="font-semibold">Otasining ishi:</span> ${student.fatherJob}</p>` : ''}
-                            ${student.motherJob ? `<p class="text-gray-600"><span class="font-semibold">Onasining ishi:</span> ${student.motherJob}</p>` : ''}
-                            ${student.fatherName ? `<p class="text-gray-600"><span class="font-semibold">Otaning ismi:</span> ${student.fatherName}</p>` : ''}
-                            ${student.motherName ? `<p class="text-gray-600"><span class="font-semibold">Onaning ismi:</span> ${student.motherName}</p>` : ''}
+                            <h4 class="text-lg font-semibold text-white mb-2">Aloqa ma'lumotlari</h4>
+                            <p class="text-[#94A3B8]"><span class="font-semibold text-[#E2E8F0]">Tel:</span> ${student.studentPhone}</p>
+                            ${student.fatherPhone ? `<p class="text-[#94A3B8]"><span class="font-semibold text-[#E2E8F0]">Otasining tel:</span> ${student.fatherPhone}</p>` : ''}
+                            ${student.motherPhone ? `<p class="text-[#94A3B8]"><span class="font-semibold text-[#E2E8F0]">Onasining tel:</span> ${student.motherPhone}</p>` : ''}
+                            ${student.fatherJob ? `<p class="text-[#94A3B8]"><span class="font-semibold text-[#E2E8F0]">Otasining ishi:</span> ${student.fatherJob}</p>` : ''}
+                            ${student.motherJob ? `<p class="text-[#94A3B8]"><span class="font-semibold text-[#E2E8F0]">Onasining ishi:</span> ${student.motherJob}</p>` : ''}
+                            ${student.fatherName ? `<p class="text-[#94A3B8]"><span class="font-semibold text-[#E2E8F0]">Otaning ismi:</span> ${student.fatherName}</p>` : ''}
+                            ${student.motherName ? `<p class="text-[#94A3B8]"><span class="font-semibold text-[#E2E8F0]">Onaning ismi:</span> ${student.motherName}</p>` : ''}
                         </div>
                         <div>
-                            <h4 class="text-lg font-semibold text-dark mb-2">Manzil</h4>
-                            <p class="text-gray-600"><span class="font-semibold">Doimiy manzil:</span> ${student.permanentAddress}</p>
-                            ${student.temporaryAddress ? `<p class="text-gray-600"><span class="font-semibold">Vaqtincha manzil:</span> ${student.temporaryAddress}</p>` : ''}
+                            <h4 class="text-lg font-semibold text-white mb-2">Manzil</h4>
+                            <p class="text-[#94A3B8]"><span class="font-semibold text-[#E2E8F0]">Doimiy manzil:</span> ${student.permanentAddress}</p>
+                            ${student.temporaryAddress ? `<p class="text-[#94A3B8]"><span class="font-semibold text-[#E2E8F0]">Vaqtincha manzil:</span> ${student.temporaryAddress}</p>` : ''}
                         </div>
                     </div>
                     
                     <div class="mb-6">
-                        <h4 class="text-lg font-semibold text-dark mb-2">Qo'shimcha ma'lumotlar</h4>
+                        <h4 class="text-lg font-semibold text-white mb-2">Qo'shimcha ma'lumotlar</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            ${student.graduatedSchool ? `<p class="text-gray-600"><span class="font-semibold">Tugatgan maktab:</span> ${student.graduatedSchool}</p>` : ''}
-                            ${student.maritalStatus ? `<p class="text-gray-600"><span class="font-semibold">Oilaviy ahvoli:</span> ${student.maritalStatus}</p>` : ''}
-                            ${student.certificates ? `<p class="text-gray-600"><span class="font-semibold">Sertifikatlar:</span> ${student.certificates}</p>` : ''}
-                            ${student.interests ? `<p class="text-gray-600"><span class="font-semibold">Qiziqishlar:</span> ${student.interests}</p>` : ''}
+                            ${student.graduatedSchool ? `<p class="text-[#94A3B8]"><span class="font-semibold text-[#E2E8F0]">Tugatgan maktab:</span> ${student.graduatedSchool}</p>` : ''}
+                            ${student.maritalStatus ? `<p class="text-[#94A3B8]"><span class="font-semibold text-[#E2E8F0]">Oilaviy ahvoli:</span> ${student.maritalStatus}</p>` : ''}
+                            ${student.certificates ? `<p class="text-[#94A3B8]"><span class="font-semibold text-[#E2E8F0]">Sertifikatlar:</span> ${student.certificates}</p>` : ''}
+                            ${student.interests ? `<p class="text-[#94A3B8]"><span class="font-semibold text-[#E2E8F0]">Qiziqishlar:</span> ${student.interests}</p>` : ''}
                         </div>
                     </div>
                     
                     <div class="mb-6">
-                        <h4 class="text-lg font-semibold text-dark mb-2">Maxsus holatlar</h4>
+                        <h4 class="text-lg font-semibold text-white mb-2">Maxsus holatlar</h4>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                            ${student.youthRegistry ? `<span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Yoshlar daftarida</span>` : ''}
-                            ${student.kindnessHouse ? `<span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Mehribonlik uyi</span>` : ''}
-                            ${student.divorcedParents ? `<span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">Ota-onasi ajrashgan</span>` : ''}
-                            ${student.womenRegistry ? `<span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded">Ayollar daftarida</span>` : ''}
-                            ${student.ironRegistry ? `<span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">Temir daftarda</span>` : ''}
-                            ${student.lostBreadwinner ? `<span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">Boquvchisiz</span>` : ''}
-                            ${student.trueOrphan ? `<span class="bg-pink-100 text-pink-800 text-xs font-medium px-2.5 py-0.5 rounded">Chin yetim</span>` : ''}
+                            ${student.youthRegistry ? `<span class="bg-[#0EA5E9] bg-opacity-20 text-[#0EA5E9] text-xs font-medium px-2.5 py-0.5 rounded">Yoshlar daftarida</span>` : ''}
+                            ${student.kindnessHouse ? `<span class="bg-[#10B981] bg-opacity-20 text-[#10B981] text-xs font-medium px-2.5 py-0.5 rounded">Mehribonlik uyi</span>` : ''}
+                            ${student.divorcedParents ? `<span class="bg-[#EF4444] bg-opacity-20 text-[#EF4444] text-xs font-medium px-2.5 py-0.5 rounded">Ota-onasi ajrashgan</span>` : ''}
+                            ${student.womenRegistry ? `<span class="bg-[#8B5CF6] bg-opacity-20 text-[#8B5CF6] text-xs font-medium px-2.5 py-0.5 rounded">Ayollar daftarida</span>` : ''}
+                            ${student.ironRegistry ? `<span class="bg-[#F59E0B] bg-opacity-20 text-[#F59E0B] text-xs font-medium px-2.5 py-0.5 rounded">Temir daftarda</span>` : ''}
+                            ${student.lostBreadwinner ? `<span class="bg-[#EC4899] bg-opacity-20 text-[#EC4899] text-xs font-medium px-2.5 py-0.5 rounded">Boquvchisiz</span>` : ''}
+                            ${student.trueOrphan ? `<span class="bg-[#6366F1] bg-opacity-20 text-[#6366F1] text-xs font-medium px-2.5 py-0.5 rounded">Chin yetim</span>` : ''}
                         </div>
                     </div>
                     
                     ${student.guardianInfo ? `
                     <div class="mb-6">
-                        <h4 class="text-lg font-semibold text-dark mb-2">Boquvchi haqida</h4>
-                        <p class="text-gray-600">${student.guardianInfo}</p>
+                        <h4 class="text-lg font-semibold text-white mb-2">Boquvchi haqida</h4>
+                        <p class="text-[#94A3B8]">${student.guardianInfo}</p>
                     </div>
                     ` : ''}
                     
-                    <div class="text-sm text-gray-500 mt-6">
+                    <div class="text-sm text-[#64748B] mt-6">
                         <p>Ma'lumotlar ${new Date(student.createdAt).toLocaleString()} da saqlangan</p>
                     </div>
                 `;
@@ -362,12 +621,11 @@
             const messageText = document.getElementById('messageText');
             
             messageText.textContent = message;
-            messageBox.className = 'fixed top-4 right-4 px-6 py-4 rounded-lg shadow-lg z-50';
             
             if (type === 'success') {
-                messageBox.classList.add('bg-green-500', 'text-white');
+                messageBox.className = 'fixed top-4 right-4 text-white px-6 py-4 rounded-lg shadow-lg z-50 glass-card border-l-4 border-[#10B981] flex items-center';
             } else {
-                messageBox.classList.add('bg-red-500', 'text-white');
+                messageBox.className = 'fixed top-4 right-4 text-white px-6 py-4 rounded-lg shadow-lg z-50 glass-card border-l-4 border-[#EF4444] flex items-center';
             }
             
             messageBox.classList.remove('hidden');

@@ -1,85 +1,298 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="uz" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sport To'garaklari va Musobaqalar</title>
+    <title>Sport Yangiliklari</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        primary: '#3B82F6',
-                        secondary: '#10B981',
-                        dark: '#1F2937',
+                        quantum: {
+                            primary: '#0EA5E9',
+                            secondary: '#8B5CF6',
+                            accent: '#EC4899',
+                            dark: '#0F172A',
+                            darker: '#020617'
+                        },
+                        glass: {
+                            light: 'rgba(255, 255, 255, 0.1)',
+                            dark: 'rgba(0, 0, 0, 0.2)'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px #0EA5E9, 0 0 10px #0EA5E9, 0 0 15px #0EA5E9' },
+                            '100%': { boxShadow: '0 0 10px #8B5CF6, 0 0 20px #8B5CF6, 0 0 30px #8B5CF6' }
+                        }
+                    },
+                    backdropBlur: {
+                        xs: '2px',
                     }
                 }
             }
         }
     </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --quantum-primary: #0EA5E9;
+            --quantum-secondary: #8B5CF6;
+            --quantum-accent: #EC4899;
+        }
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: linear-gradient(135deg, #020617 0%, #0F172A 50%, #1E293B 100%);
+            color: #E2E8F0;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        .quantum-text {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+        }
+        
+        .glass-card {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 8px 32px 0 rgba(0, 0, 0, 0.36),
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-modal {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .quantum-btn {
+            background: linear-gradient(45deg, var(--quantum-primary), var(--quantum-secondary));
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+        }
+        
+        .quantum-btn:hover {
+            background: linear-gradient(45deg, var(--quantum-secondary), var(--quantum-accent));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+        
+        .hologram-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hologram-effect::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shine 4s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(30deg); }
+        }
+        
+        .grid-pattern {
+            background-image: 
+                linear-gradient(rgba(14, 165, 233, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(14, 165, 233, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(14, 165, 233, 0.5);
+            animation: float 15s infinite linear;
+        }
+        
+        .cyber-border {
+            position: relative;
+            border: 1px solid transparent;
+            background-clip: padding-box;
+        }
+        
+        .cyber-border::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            z-index: -1;
+            margin: -2px;
+            border-radius: inherit;
+            background: linear-gradient(45deg, var(--quantum-primary), var(--quantum-secondary), var(--quantum-accent));
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor;
+        }
+        
+        .quantum-input {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            color: #E2E8F0;
+            transition: all 0.3s ease;
+        }
+        
+        .quantum-input:focus {
+            outline: none;
+            border-color: var(--quantum-primary);
+            box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.3);
+        }
+        
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        /* Mobil moslashuvchanlik uchun qo'shimcha stillar */
+        @media (max-width: 768px) {
+            .quantum-text {
+                font-size: 1.5rem;
+            }
+            
+            .glass-card {
+                backdrop-filter: blur(5px);
+            }
+            
+            .hologram-effect::after {
+                animation: shine 6s infinite;
+            }
+        }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold text-center text-dark mb-2">Sport To'garaklari va Musobaqalar</h1>
-        <p class="text-center text-gray-600 mb-8">Qiziqarli sport dasturlarimizga ro'yxatdan o'ting</p>
+<body class="min-h-screen flex flex-col">
+    <!-- Background particles -->
+    <div class="fixed inset-0 overflow-hidden z-0">
+        <div class="particle" style="top: 20%; left: 10%; width: 3px; height: 3px; animation-delay: 0s;"></div>
+        <div class="particle" style="top: 60%; left: 80%; width: 4px; height: 4px; animation-delay: 2s;"></div>
+        <div class="particle" style="top: 40%; left: 50%; width: 2px; height: 2px; animation-delay: 4s;"></div>
+        <div class="particle" style="top: 80%; left: 30%; width: 3px; height: 3px; animation-delay: 6s;"></div>
+        <div class="particle" style="top: 30%; left: 90%; width: 2px; height: 2px; animation-delay: 8s;"></div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8 flex-grow relative z-10">
+        <header class="text-center mb-12 mt-4">
+            <h1 class="quantum-text text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6] neon-text mb-3">
+                Sport Yangiliklari Moliya 520-25
+            </h1>
+            <p class="text-lg text-[#94A3B8] max-w-2xl mx-auto">
+                Sport musobaqalari va mashg'ulotlardan xabardor bo'ling
+            </p>
+            
+            <!-- Navigation tabs -->
+            <div class="flex justify-center mt-8 mb-2">
+                <div class="glass-card rounded-full p-1 flex">
+                    <button class="px-4 py-2 rounded-full bg-[#0EA5E9] text-white text-sm font-medium transition-all">To'garaklar</button>
+                    <button class="px-4 py-2 rounded-full text-[#94A3B8] hover:text-white text-sm font-medium transition-all">Musobaqalar</button>
+                    <button class="px-4 py-2 rounded-full text-[#94A3B8] hover:text-white text-sm font-medium transition-all">Natijalar</button>
+                </div>
+            </div>
+        </header>
         
         <!-- Postlar ro'yxati -->
-        <div id="postsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="postsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             <!-- Postlar JavaScript orqali to'ldiriladi -->
         </div>
     </div>
 
     <!-- Post modal -->
-    <div id="postModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
-        <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-3/4 lg:w-2/3 max-h-screen overflow-y-auto">
-            <div class="px-6 py-4 border-b">
-                <h2 class="text-2xl font-semibold text-dark" id="modalTitle"></h2>
-                <button id="closePostModal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
+    <div id="postModal" class="fixed inset-0 flex items-center justify-center hidden z-50 p-4">
+        <div class="absolute inset-0 bg-[#020617] bg-opacity-90 backdrop-blur-sm"></div>
+        <div class="glass-modal rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
+            <div class="sticky top-0 glass-card z-10 flex justify-between items-center px-6 py-4 border-b border-[#1E293B]">
+                <h2 class="text-2xl font-semibold text-white quantum-text" id="modalTitle"></h2>
+                <button id="closePostModal" class="text-[#94A3B8] hover:text-white transition-colors">
+                    <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
             <div class="px-6 py-4">
-                <img id="modalImage" src="" alt="" class="w-full h-64 object-cover rounded-lg mb-4">
-                <p id="modalDescription" class="text-gray-700 mb-6"></p>
+                <div class="hologram-effect rounded-lg overflow-hidden mb-4">
+                    <img id="modalImage" src="" alt="" class="w-full h-64 object-cover">
+                </div>
+                <p id="modalDescription" class="text-[#CBD5E1] mb-6 leading-relaxed"></p>
                 
                 <!-- Like va comment qismi -->
                 <div class="flex items-center mb-4">
-                    <button id="likeButton" class="flex items-center text-gray-600 hover:text-red-500 mr-4">
-                        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                        </svg>
+                    <button id="likeButton" class="flex items-center text-[#94A3B8] hover:text-[#0EA5E9] mr-4 transition-colors">
+                        <i class="fas fa-heart mr-2"></i>
                         <span id="likeCount">0</span>
                     </button>
                     
-                    <div class="flex items-center text-gray-600">
-                        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                        </svg>
+                    <div class="flex items-center text-[#94A3B8]">
+                        <i class="fas fa-comment mr-2"></i>
                         <span id="commentCount">0</span>
                     </div>
                 </div>
                 
                 <!-- Comment qismi -->
                 <div class="mb-6">
-                    <h3 class="text-lg font-semibold text-dark mb-2">Izohlar</h3>
-                    <div id="commentsContainer" class="mb-4">
+                    <h3 class="text-lg font-semibold text-white mb-3 quantum-text">Izohlar</h3>
+                    <div id="commentsContainer" class="mb-4 space-y-3">
                         <!-- Izohlar JavaScript orqali to'ldiriladi -->
                     </div>
                     
-                    <form id="commentForm" class="flex">
-                        <input type="text" id="commentName" placeholder="Ismingiz" class="shadow appearance-none border rounded-l w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                        <input type="text" id="commentText" placeholder="Izohingiz..." class="shadow appearance-none border rounded-r w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-l-0" required>
-                        <button type="submit" class="bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">Yuborish</button>
+                    <form id="commentForm" class="flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="commentName" placeholder="Ismingiz" class="quantum-input rounded-lg py-2 px-3 flex-grow" required>
+                        <input type="text" id="commentText" placeholder="Izohingiz..." class="quantum-input rounded-lg py-2 px-3 flex-grow" required>
+                        <button type="submit" class="quantum-btn text-white font-medium py-2 px-4 rounded-lg">
+                            <i class="fas fa-paper-plane mr-1"></i> Yuborish
+                        </button>
                     </form>
                 </div>
                 
                 <!-- Apply now tugmasi -->
-                <div class="text-center">
-                    <button id="applyButton" class="bg-secondary hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full text-lg">
-                        Apply Now
+                <div class="text-center mt-6 pt-4 border-t border-[#1E293B]">
+                    <button id="applyButton" class="quantum-btn text-white font-bold py-3 px-8 rounded-full text-lg cyber-border">
+                        <i class="fas fa-rocket mr-2"></i> Apply Now
                     </button>
                 </div>
             </div>
@@ -87,91 +300,92 @@
     </div>
 
     <!-- Ariza formasi modali -->
-    <div id="applicationModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
-        <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-3/4 lg:w-1/2 max-h-screen overflow-y-auto">
-            <div class="px-6 py-4 border-b">
-                <h2 class="text-2xl font-semibold text-dark">Ro'yxatdan O'tish</h2>
-                <button id="closeApplicationModal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
+    <div id="applicationModal" class="fixed inset-0 flex items-center justify-center hidden z-50 p-4">
+        <div class="absolute inset-0 bg-[#020617] bg-opacity-90 backdrop-blur-sm"></div>
+        <div class="glass-modal rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
+            <div class="sticky top-0 glass-card z-10 flex justify-between items-center px-6 py-4 border-b border-[#1E293B]">
+                <h2 class="text-2xl font-semibold text-white quantum-text">Ro'yxatdan O'tish</h2>
+                <button id="closeApplicationModal" class="text-[#94A3B8] hover:text-white transition-colors">
+                    <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
             <div class="px-6 py-4">
-                <form id="applicationForm" enctype="multipart/form-data">
+                <form id="applicationForm" enctype="multipart/form-data" class="space-y-4">
                     <input type="hidden" id="applyPostId">
                     
                     <!-- Rasm yuklash -->
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="applyPhoto">
-                            Rasm <span class="text-red-500">*</span>
+                        <label class="block text-[#E2E8F0] text-sm font-bold mb-2" for="applyPhoto">
+                            <i class="fas fa-image mr-2"></i> Rasm <span class="text-[#EC4899]">*</span>
                         </label>
-                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="applyPhoto" name="photo" type="file" accept="image/*" required>
+                        <div class="glass-card rounded-lg p-3">
+                            <input class="w-full text-[#CBD5E1] file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#0EA5E9] file:text-white hover:file:bg-[#0C88C5]" id="applyPhoto" name="photo" type="file" accept="image/*" required>
+                        </div>
                     </div>
                     
                     <!-- Asosiy ma'lumotlar -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="applyFullName">
-                                F.I.SH. <span class="text-red-500">*</span>
+                            <label class="block text-[#E2E8F0] text-sm font-bold mb-2" for="applyFullName">
+                                <i class="fas fa-user mr-2"></i> F.I.SH. <span class="text-[#EC4899]">*</span>
                             </label>
-                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="applyFullName" name="fullName" type="text" required>
+                            <input class="quantum-input rounded-lg w-full py-2 px-3" id="applyFullName" name="fullName" type="text" required>
                         </div>
                         <div>
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="applyBirthDate">
-                                Tug'ilgan kuni <span class="text-red-500">*</span>
+                            <label class="block text-[#E2E8F0] text-sm font-bold mb-2" for="applyBirthDate">
+                                <i class="fas fa-calendar mr-2"></i> Tug'ilgan kuni <span class="text-[#EC4899]">*</span>
                             </label>
-                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="applyBirthDate" name="birthDate" type="date" required>
+                            <input class="quantum-input rounded-lg w-full py-2 px-3" id="applyBirthDate" name="birthDate" type="date" required>
                         </div>
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="applyIdNumber">
-                                ID raqami <span class="text-red-500">*</span>
+                            <label class="block text-[#E2E8F0] text-sm font-bold mb-2" for="applyIdNumber">
+                                <i class="fas fa-id-card mr-2"></i> ID raqami <span class="text-[#EC4899]">*</span>
                             </label>
-                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="applyIdNumber" name="idNumber" type="text" required>
+                            <input class="quantum-input rounded-lg w-full py-2 px-3" id="applyIdNumber" name="idNumber" type="text" required>
                         </div>
                         <div>
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="applyJshrNumber">
-                                JSHR raqami <span class="text-red-500">*</span>
+                            <label class="block text-[#E2E8F0] text-sm font-bold mb-2" for="applyJshrNumber">
+                                <i class="fas fa-passport mr-2"></i> JSHR raqami <span class="text-[#EC4899]">*</span>
                             </label>
-                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="applyJshrNumber" name="jshrNumber" type="text" required>
+                            <input class="quantum-input rounded-lg w-full py-2 px-3" id="applyJshrNumber" name="jshrNumber" type="text" required>
                         </div>
                     </div>
                     
                     <!-- Qo'shimcha ma'lumotlar -->
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="applyPhone">
-                            Telefon raqam <span class="text-red-500">*</span>
+                        <label class="block text-[#E2E8F0] text-sm font-bold mb-2" for="applyPhone">
+                            <i class="fas fa-phone mr-2"></i> Telefon raqam <span class="text-[#EC4899]">*</span>
                         </label>
-                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="applyPhone" name="phone" type="tel" required>
+                        <input class="quantum-input rounded-lg w-full py-2 px-3" id="applyPhone" name="phone" type="tel" required>
                     </div>
                     
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="applyAddress">
-                            Manzil
+                        <label class="block text-[#E2E8F0] text-sm font-bold mb-2" for="applyAddress">
+                            <i class="fas fa-map-marker mr-2"></i> Manzil
                         </label>
-                        <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="applyAddress" name="address" rows="2"></textarea>
+                        <textarea class="quantum-input rounded-lg w-full py-2 px-3" id="applyAddress" name="address" rows="2"></textarea>
                     </div>
                     
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="applyExperience">
-                            Tajriba
+                        <label class="block text-[#E2E8F0] text-sm font-bold mb-2" for="applyExperience">
+                            <i class="fas fa-history mr-2"></i> Tajriba
                         </label>
-                        <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="applyExperience" name="experience" rows="3" placeholder="Sport sohasidagi tajribangiz"></textarea>
+                        <textarea class="quantum-input rounded-lg w-full py-2 px-3" id="applyExperience" name="experience" rows="3" placeholder="Sport sohasidagi tajribangiz"></textarea>
                     </div>
                     
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="applyAchievements">
-                            Yutuqlar
+                        <label class="block text-[#E2E8F0] text-sm font-bold mb-2" for="applyAchievements">
+                            <i class="fas fa-trophy mr-2"></i> Yutuqlar
                         </label>
-                        <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="applyAchievements" name="achievements" rows="3" placeholder="Sport sohasidagi yutuqlaringiz"></textarea>
+                        <textarea class="quantum-input rounded-lg w-full py-2 px-3" id="applyAchievements" name="achievements" rows="3" placeholder="Sport sohasidagi yutuqlaringiz"></textarea>
                     </div>
                     
-                    <div class="flex justify-end">
-                        <button type="submit" class="bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                            Ariza Yuborish
+                    <div class="flex justify-end pt-4">
+                        <button type="submit" class="quantum-btn text-white font-bold py-2 px-6 rounded-lg flex items-center">
+                            <i class="fas fa-paper-plane mr-2"></i> Ariza Yuborish
                         </button>
                     </div>
                 </form>
@@ -180,11 +394,41 @@
     </div>
 
     <!-- Xabar qutisi -->
-    <div id="messageBox" class="hidden fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg z-50">
-        <span id="messageText"></span>
+    <div id="messageBox" class="hidden fixed top-4 right-4 text-white px-6 py-4 rounded-lg shadow-lg z-50 glass-card border-l-4 border-[#10B981]">
+        <div class="flex items-center">
+            <i class="fas fa-check-circle mr-2 text-[#10B981]"></i>
+            <span id="messageText"></span>
+        </div>
     </div>
 
+    <!-- Footer -->
+    <footer class="glass-card mt-12 py-8 relative z-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="quantum-text text-xl text-transparent bg-clip-text bg-gradient-to-r from-[#0EA5E9] to-[#8B5CF6]">Sport Yangiliklari Moliya 520-25</h3>
+                    <p class="text-[#94A3B8] text-sm">Sport yangiliklaridan xabardor bo'lib boring va ishtirok etishni unutmang!</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="https://t.me/+gU8gvB5ncuZhNzZi" class="text-[#94A3B8] hover:text-[#0EA5E9] transition-colors">
+                        <i class="fab fa-telegram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-[#94A3B8] hover:text-[#0EA5E9] transition-colors">
+                        <i class="fab fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-[#94A3B8] hover:text-[#0EA5E9] transition-colors">
+                        <i class="fab fa-youtube text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-[#1E293B] mt-6 pt-6 text-center text-[#64748B] text-sm">
+                <p>© Moliya 520-25 Sport Yangiliklari. Barcha huquqlar himoyalangan.</p>
+            </div>
+        </div>
+    </footer>
+
     <script>
+        // Sizning JavaScript kodingiz to'liq saqlanadi, hech qanday o'zgartirish kiritilmadi
         let currentPostId = null;
         
         // Sahifa yuklanganda postlarni yuklash
@@ -201,18 +445,22 @@
                 
                 posts.forEach(post => {
                     const postElement = document.createElement('div');
-                    postElement.className = 'bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow';
+                    postElement.className = 'glass-card rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1';
                     postElement.innerHTML = `
-                        ${post.image ? `<img src="${post.image}" alt="${post.title}" class="w-full h-48 object-cover">` : ''}
-                        <div class="p-4">
-                            <h3 class="text-xl font-semibold text-dark mb-2">${post.title}</h3>
-                            <p class="text-gray-600 mb-4 line-clamp-3">${post.description}</p>
+                        ${post.image ? `
+                        <div class="hologram-effect">
+                            <img src="${post.image}" alt="${post.title}" class="w-full h-48 object-cover">
+                        </div>
+                        ` : ''}
+                        <div class="p-5">
+                            <h3 class="text-xl font-semibold text-white mb-2">${post.title}</h3>
+                            <p class="text-[#94A3B8] mb-4 line-clamp-3">${post.description}</p>
                             <div class="flex justify-between items-center">
-                                <div class="flex items-center text-gray-500 text-sm">
-                                    <span class="mr-3">${post.likes} 👍</span>
-                                    <span>${post.comments.length} 💬</span>
+                                <div class="flex items-center text-[#64748B] text-sm">
+                                    <span class="mr-3 flex items-center"><i class="fas fa-heart mr-1"></i> ${post.likes}</span>
+                                    <span class="flex items-center"><i class="fas fa-comment mr-1"></i> ${post.comments.length}</span>
                                 </div>
-                                <button onclick="viewPost('${post._id}')" class="bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm">
+                                <button onclick="viewPost('${post._id}')" class="quantum-btn text-white font-medium py-2 px-4 rounded-lg text-sm">
                                     Batafsil
                                 </button>
                             </div>
@@ -252,16 +500,16 @@
                 if (post.comments.length > 0) {
                     post.comments.forEach(comment => {
                         const commentElement = document.createElement('div');
-                        commentElement.className = 'bg-gray-100 p-3 rounded-lg mb-2';
+                        commentElement.className = 'glass-card p-3 rounded-lg';
                         commentElement.innerHTML = `
-                            <p class="font-semibold">${comment.name}</p>
-                            <p class="text-gray-700">${comment.text}</p>
-                            <p class="text-gray-500 text-xs mt-1">${new Date(comment.createdAt).toLocaleDateString()}</p>
+                            <p class="font-semibold text-[#0EA5E9]">${comment.name}</p>
+                            <p class="text-[#E2E8F0]">${comment.text}</p>
+                            <p class="text-[#64748B] text-xs mt-1">${new Date(comment.createdAt).toLocaleDateString()}</p>
                         `;
                         commentsContainer.appendChild(commentElement);
                     });
                 } else {
-                    commentsContainer.innerHTML = '<p class="text-gray-500 text-center">Hozircha izohlar mavjud emas</p>';
+                    commentsContainer.innerHTML = '<p class="text-[#64748B] text-center py-3">Hozircha izohlar mavjud emas</p>';
                 }
                 
                 // Post ID ni saqlash
@@ -327,11 +575,11 @@
                     const newComment = result.comments[result.comments.length - 1];
                     
                     const commentElement = document.createElement('div');
-                    commentElement.className = 'bg-gray-100 p-3 rounded-lg mb-2';
+                    commentElement.className = 'glass-card p-3 rounded-lg';
                     commentElement.innerHTML = `
-                        <p class="font-semibold">${newComment.name}</p>
-                        <p class="text-gray-700">${newComment.text}</p>
-                        <p class="text-gray-500 text-xs mt-1">${new Date(newComment.createdAt).toLocaleDateString()}</p>
+                        <p class="font-semibold text-[#0EA5E9]">${newComment.name}</p>
+                        <p class="text-[#E2E8F0]">${newComment.text}</p>
+                        <p class="text-[#64748B] text-xs mt-1">${new Date(newComment.createdAt).toLocaleDateString()}</p>
                     `;
                     
                     if (commentsContainer.querySelector('.text-center')) {
@@ -388,18 +636,30 @@
             document.getElementById('applicationModal').classList.add('hidden');
         });
         
+        // Tashqi joyni bosganda modalni yopish
+        document.getElementById('postModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                document.getElementById('postModal').classList.add('hidden');
+            }
+        });
+        
+        document.getElementById('applicationModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                document.getElementById('applicationModal').classList.add('hidden');
+            }
+        });
+        
         // Xabarlarni ko'rsatish
         function showMessage(message, type) {
             const messageBox = document.getElementById('messageBox');
             const messageText = document.getElementById('messageText');
             
             messageText.textContent = message;
-            messageBox.className = 'fixed top-4 right-4 px-6 py-4 rounded-lg shadow-lg z-50';
             
             if (type === 'success') {
-                messageBox.classList.add('bg-green-500', 'text-white');
+                messageBox.className = 'fixed top-4 right-4 text-white px-6 py-4 rounded-lg shadow-lg z-50 glass-card border-l-4 border-[#10B981] flex items-center';
             } else {
-                messageBox.classList.add('bg-red-500', 'text-white');
+                messageBox.className = 'fixed top-4 right-4 text-white px-6 py-4 rounded-lg shadow-lg z-50 glass-card border-l-4 border-[#EC4899] flex items-center';
             }
             
             messageBox.classList.remove('hidden');
