@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Talaba Ma'lumotlari Formasi</title>
+    <title>Sport To'garaklari va Musobaqalar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -20,314 +20,346 @@
     </script>
 </head>
 <body class="bg-gray-100 min-h-screen">
-    <div class="container mx-auto px-4 py-8 max-w-4xl">
-        <h1 class="text-3xl font-bold text-center text-dark mb-2">Talaba Ma'lumotlari Formasi</h1>
-        <p class="text-center text-gray-600 mb-8">Iltimos, barcha maydonlarni to'ldiring</p>
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center text-dark mb-2">Sport To'garaklari va Musobaqalar</h1>
+        <p class="text-center text-gray-600 mb-8">Qiziqarli sport dasturlarimizga ro'yxatdan o'ting</p>
         
-        <form id="studentForm" class="bg-white shadow-md rounded-lg p-6 mb-8" enctype="multipart/form-data">
-            <!-- Rasm yuklash -->
-            <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="photo">
-                    Talaba rasmi <span class="text-red-500">*</span>
-                </label>
-                <div class="flex items-center justify-center w-full">
-                    <label for="photo" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                            <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                            </svg>
-                            <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Rasm yuklash uchun bosing</span> yoki sudrab keltiring</p>
-                            <p class="text-xs text-gray-500">PNG, JPG (MAX. 5MB)</p>
-                        </div>
-                        <input id="photo" name="photo" type="file" class="hidden" accept="image/*" required />
-                    </label>
-                </div>
-                <div id="photoPreview" class="mt-4 hidden flex justify-center">
-                    <img id="previewImage" class="h-48 rounded-lg shadow-md" src="" alt="Rasm ko'rinishi">
-                </div>
-            </div>
-
-            <!-- Shaxsiy ma'lumotlar -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="lastName">
-                        Familiya <span class="text-red-500">*</span>
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="lastName" name="lastName" type="text" placeholder="Familiya" required>
-                </div>
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="firstName">
-                        Ism <span class="text-red-500">*</span>
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="firstName" name="firstName" type="text" placeholder="Ism" required>
-                </div>
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="middleName">
-                        Otasining ismi <span class="text-red-500">*</span>
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="middleName" name="middleName" type="text" placeholder="Otasining ismi" required>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="birthDate">
-                        Tug'ilgan kuni <span class="text-red-500">*</span>
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="birthDate" name="birthDate" type="date" required>
-                </div>
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="nationality">
-                        Millati <span class="text-red-500">*</span>
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="nationality" name="nationality" type="text" placeholder="Millati" required>
-                </div>
-            </div>
-
-            <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="permanentAddress">
-                    Doimiy yashash manzili <span class="text-red-500">*</span>
-                </label>
-                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="permanentAddress" name="permanentAddress" rows="2" placeholder="Doimiy yashash manzili" required></textarea>
-            </div>
-
-            <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="temporaryAddress">
-                    Vaqtincha yashash manzili
-                </label>
-                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="temporaryAddress" name="temporaryAddress" rows="2" placeholder="Vaqtincha yashash manzili (agar mavjud bo'lsa)"></textarea>
-            </div>
-
-            <!-- To'lov va identifikatsiya ma'lumotlari -->
-            <h2 class="text-xl font-semibold text-dark mb-4 border-b pb-2">To'lov va identifikatsiya ma'lumotlari</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="paymentType">
-                        To'lov turi <span class="text-red-500">*</span>
-                    </label>
-                    <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="paymentType" name="paymentType" required>
-                        <option value="">To'lov turini tanlang</option>
-                        <option value="budget">Davlat budjeti</option>
-                        <option value="contract">Kontrakt asosida</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="idNumber">
-                        ID raqami <span class="text-red-500">*</span>
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="idNumber" name="idNumber" type="text" placeholder="ID raqami" required>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="jshrNumber">
-                        JSHR raqami <span class="text-red-500">*</span>
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="jshrNumber" name="jshrNumber" type="text" placeholder="JSHR raqami" required>
-                </div>
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="idIssueInfo">
-                        Qachon va qayerdan berilgan <span class="text-red-500">*</span>
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="idIssueInfo" name="idIssueInfo" type="text" placeholder="Masalan: 12.12.2020, Toshkent sh." required>
-                </div>
-            </div>
-
-            <div class="mb-6">
-                <label class="inline-flex items-center">
-                    <input type="checkbox" id="privilegedAdmission" name="privilegedAdmission" class="form-checkbox h-5 w-5 text-primary">
-                    <span class="ml-2 text-gray-700">Imtiyoz asosida o'qishga kirganlik</span>
-                </label>
-            </div>
-
-            <!-- Aloqa ma'lumotlari -->
-            <h2 class="text-xl font-semibold text-dark mb-4 border-b pb-2">Aloqa ma'lumotlari</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="studentPhone">
-                        Talaba tel raqami <span class="text-red-500">*</span>
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="studentPhone" name="studentPhone" type="tel" placeholder="+998 XX XXX-XX-XX" required>
-                </div>
-                    <div>
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="fatherName">
-            Otasining ismi
-        </label>
-        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fatherName" name="fatherName" type="text" placeholder="Otaning ismi">
-    </div>
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="fatherPhone">
-                        Otasining tel raqami
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fatherPhone" name="fatherPhone" type="tel" placeholder="+998 XX XXX-XX-XX">
-                </div>
-                    <div>
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="motherName">
-            Onasining ismi
-        </label>
-        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="motherName" name="motherName" type="text" placeholder="Onaning ismi">
-    </div>
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="motherPhone">
-                        Onasining tel raqami
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="motherPhone" name="motherPhone" type="tel" placeholder="+998 XX XXX-XX-XX">
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="fatherJob">
-                        Otasining ish lavozimi
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="fatherJob" name="fatherJob" type="text" placeholder="Otasining ish lavozimi">
-                </div>
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="motherJob">
-                        Onasining ish lavozimi
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="motherJob" name="motherJob" type="text" placeholder="Onasining ish lavozimi">
-                </div>
-            </div>
-
-            <!-- Qo'shimcha ma'lumotlar -->
-            <h2 class="text-xl font-semibold text-dark mb-4 border-b pb-2">Qo'shimcha ma'lumotlar</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="maritalStatus">
-                        Oilaviy ahvoli
-                    </label>
-                    <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="maritalStatus" name="maritalStatus">
-                        <option value="">Tanlang</option>
-                        <option value="single">Turmush qurmagan</option>
-                        <option value="married">Turmush qurgan</option>
-                        <option value="divorced">Ota Onasi Ajrashgan</option>
-                        <option value="widowed">Muxtojlik yo'q, yaxshi</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="graduatedSchool">
-                        Qaysi maktabni tugatgan (atestat raqami)
-                    </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="graduatedSchool" name="graduatedSchool" type="text" placeholder="Maktab nomi va atestat raqami">
-                </div>
-            </div>
-
-            <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="certificates">
-                    Til/Fan sertifikatlari
-                </label>
-                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="certificates" name="certificates" rows="2" placeholder="Sertifikatlar haqida ma'lumot"></textarea>
-            </div>
-
-            <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="interests">
-                    Talaba qiziqishlari
-                </label>
-                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="interests" name="interests" rows="2" placeholder="Talabaning qiziqishlari va hobbiylari"></textarea>
-            </div>
-
-            <!-- Maxsus holatlar -->
-            <h2 class="text-xl font-semibold text-dark mb-4 border-b pb-2">Maxsus holatlar</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div>
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" id="youthRegistry" name="youthRegistry" class="form-checkbox h-5 w-5 text-primary">
-                        <span class="ml-2 text-gray-700">Yoshlar daftariga kirganlik</span>
-                    </label>
-                </div>
-                <div>
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" id="kindnessHouse" name="kindnessHouse" class="form-checkbox h-5 w-5 text-primary">
-                        <span class="ml-2 text-gray-700">Mehribonlik uyi tarbiyalanuvchisi</span>
-                    </label>
-                </div>
-                <div>
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" id="divorcedParents" name="divorcedParents" class="form-checkbox h-5 w-5 text-primary">
-                        <span class="ml-2 text-gray-700">Ota-onasi ajrashganlik</span>
-                    </label>
-                </div>
-                <div>
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" id="womenRegistry" name="womenRegistry" class="form-checkbox h-5 w-5 text-primary">
-                        <span class="ml-2 text-gray-700">Ayollar daftarida</span>
-                    </label>
-                </div>
-                <div>
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" id="ironRegistry" name="ironRegistry" class="form-checkbox h-5 w-5 text-primary">
-                        <span class="ml-2 text-gray-700">Temir daftariga kirgan oila</span>
-                    </label>
-                </div>
-                <div>
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" id="lostBreadwinner" name="lostBreadwinner" class="form-checkbox h-5 w-5 text-primary">
-                        <span class="ml-2 text-gray-700">Boquvchisini yo'qotgan oila</span>
-                    </label>
-                </div>
-                <div>
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" id="trueOrphan" name="trueOrphan" class="form-checkbox h-5 w-5 text-primary">
-                        <span class="ml-2 text-gray-700">Chin yetimlik</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="guardianInfo">
-                    Boquvchisi (Agar ota-ona vafot etgan yoki migrant bo'lsa)
-                </label>
-                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="guardianInfo" name="guardianInfo" rows="2" placeholder="Boquvchi haqida ma'lumot"></textarea>
-            </div>
-
-            <!-- Yuborish tugmasi -->
-            <div class="flex items-center justify-center mt-8">
-                <button id="submitButton" class="bg-primary hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full focus:outline-none focus:shadow-outline text-lg transition duration-300 ease-in-out transform hover:scale-105" type="submit">
-                    Ma'lumotlarni Yuborish
-                </button>
-            </div>
-        </form>
-
-        <!-- Xabar qutisi -->
-        <div id="messageBox" class="hidden fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg z-50">
-            <span id="messageText"></span>
+        <!-- Postlar ro'yxati -->
+        <div id="postsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Postlar JavaScript orqali to'ldiriladi -->
         </div>
     </div>
 
+    <!-- Post modal -->
+    <div id="postModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-3/4 lg:w-2/3 max-h-screen overflow-y-auto">
+            <div class="px-6 py-4 border-b">
+                <h2 class="text-2xl font-semibold text-dark" id="modalTitle"></h2>
+                <button id="closePostModal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="px-6 py-4">
+                <img id="modalImage" src="" alt="" class="w-full h-64 object-cover rounded-lg mb-4">
+                <p id="modalDescription" class="text-gray-700 mb-6"></p>
+                
+                <!-- Like va comment qismi -->
+                <div class="flex items-center mb-4">
+                    <button id="likeButton" class="flex items-center text-gray-600 hover:text-red-500 mr-4">
+                        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                        <span id="likeCount">0</span>
+                    </button>
+                    
+                    <div class="flex items-center text-gray-600">
+                        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                        <span id="commentCount">0</span>
+                    </div>
+                </div>
+                
+                <!-- Comment qismi -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-dark mb-2">Izohlar</h3>
+                    <div id="commentsContainer" class="mb-4">
+                        <!-- Izohlar JavaScript orqali to'ldiriladi -->
+                    </div>
+                    
+                    <form id="commentForm" class="flex">
+                        <input type="text" id="commentName" placeholder="Ismingiz" class="shadow appearance-none border rounded-l w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        <input type="text" id="commentText" placeholder="Izohingiz..." class="shadow appearance-none border rounded-r w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-l-0" required>
+                        <button type="submit" class="bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">Yuborish</button>
+                    </form>
+                </div>
+                
+                <!-- Apply now tugmasi -->
+                <div class="text-center">
+                    <button id="applyButton" class="bg-secondary hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full text-lg">
+                        Apply Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ariza formasi modali -->
+    <div id="applicationModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-3/4 lg:w-1/2 max-h-screen overflow-y-auto">
+            <div class="px-6 py-4 border-b">
+                <h2 class="text-2xl font-semibold text-dark">Ro'yxatdan O'tish</h2>
+                <button id="closeApplicationModal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="px-6 py-4">
+                <form id="applicationForm" enctype="multipart/form-data">
+                    <input type="hidden" id="applyPostId">
+                    
+                    <!-- Rasm yuklash -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="applyPhoto">
+                            Rasm <span class="text-red-500">*</span>
+                        </label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="applyPhoto" name="photo" type="file" accept="image/*" required>
+                    </div>
+                    
+                    <!-- Asosiy ma'lumotlar -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="applyFullName">
+                                F.I.SH. <span class="text-red-500">*</span>
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="applyFullName" name="fullName" type="text" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="applyBirthDate">
+                                Tug'ilgan kuni <span class="text-red-500">*</span>
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="applyBirthDate" name="birthDate" type="date" required>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="applyIdNumber">
+                                ID raqami <span class="text-red-500">*</span>
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="applyIdNumber" name="idNumber" type="text" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="applyJshrNumber">
+                                JSHR raqami <span class="text-red-500">*</span>
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="applyJshrNumber" name="jshrNumber" type="text" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Qo'shimcha ma'lumotlar -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="applyPhone">
+                            Telefon raqam <span class="text-red-500">*</span>
+                        </label>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="applyPhone" name="phone" type="tel" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="applyAddress">
+                            Manzil
+                        </label>
+                        <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="applyAddress" name="address" rows="2"></textarea>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="applyExperience">
+                            Tajriba
+                        </label>
+                        <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="applyExperience" name="experience" rows="3" placeholder="Sport sohasidagi tajribangiz"></textarea>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="applyAchievements">
+                            Yutuqlar
+                        </label>
+                        <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="applyAchievements" name="achievements" rows="3" placeholder="Sport sohasidagi yutuqlaringiz"></textarea>
+                    </div>
+                    
+                    <div class="flex justify-end">
+                        <button type="submit" class="bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            Ariza Yuborish
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Xabar qutisi -->
+    <div id="messageBox" class="hidden fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg z-50">
+        <span id="messageText"></span>
+    </div>
+
     <script>
-        // Rasmni ko'rsatish
-        document.getElementById('photo').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const preview = document.getElementById('photoPreview');
-                    const previewImage = document.getElementById('previewImage');
-                    previewImage.src = e.target.result;
-                    preview.classList.remove('hidden');
+        let currentPostId = null;
+        
+        // Sahifa yuklanganda postlarni yuklash
+        document.addEventListener('DOMContentLoaded', loadPosts);
+        
+        // Postlarni yuklash
+        async function loadPosts() {
+            try {
+                const response = await fetch('/api/posts');
+                const posts = await response.json();
+                
+                const postsContainer = document.getElementById('postsContainer');
+                postsContainer.innerHTML = '';
+                
+                posts.forEach(post => {
+                    const postElement = document.createElement('div');
+                    postElement.className = 'bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow';
+                    postElement.innerHTML = `
+                        ${post.image ? `<img src="${post.image}" alt="${post.title}" class="w-full h-48 object-cover">` : ''}
+                        <div class="p-4">
+                            <h3 class="text-xl font-semibold text-dark mb-2">${post.title}</h3>
+                            <p class="text-gray-600 mb-4 line-clamp-3">${post.description}</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center text-gray-500 text-sm">
+                                    <span class="mr-3">${post.likes} 👍</span>
+                                    <span>${post.comments.length} 💬</span>
+                                </div>
+                                <button onclick="viewPost('${post._id}')" class="bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm">
+                                    Batafsil
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    postsContainer.appendChild(postElement);
+                });
+            } catch (error) {
+                console.error('Xatolik:', error);
+            }
+        }
+        
+        // Postni ko'rish
+        async function viewPost(postId) {
+            try {
+                const response = await fetch(`/api/posts/${postId}`);
+                const post = await response.json();
+                
+                document.getElementById('modalTitle').textContent = post.title;
+                document.getElementById('modalDescription').textContent = post.description;
+                document.getElementById('likeCount').textContent = post.likes;
+                document.getElementById('commentCount').textContent = post.comments.length;
+                
+                const modalImage = document.getElementById('modalImage');
+                if (post.image) {
+                    modalImage.src = post.image;
+                    modalImage.classList.remove('hidden');
+                } else {
+                    modalImage.classList.add('hidden');
                 }
-                reader.readAsDataURL(file);
+                
+                // Kommentlarni ko'rsatish
+                const commentsContainer = document.getElementById('commentsContainer');
+                commentsContainer.innerHTML = '';
+                
+                if (post.comments.length > 0) {
+                    post.comments.forEach(comment => {
+                        const commentElement = document.createElement('div');
+                        commentElement.className = 'bg-gray-100 p-3 rounded-lg mb-2';
+                        commentElement.innerHTML = `
+                            <p class="font-semibold">${comment.name}</p>
+                            <p class="text-gray-700">${comment.text}</p>
+                            <p class="text-gray-500 text-xs mt-1">${new Date(comment.createdAt).toLocaleDateString()}</p>
+                        `;
+                        commentsContainer.appendChild(commentElement);
+                    });
+                } else {
+                    commentsContainer.innerHTML = '<p class="text-gray-500 text-center">Hozircha izohlar mavjud emas</p>';
+                }
+                
+                // Post ID ni saqlash
+                currentPostId = postId;
+                document.getElementById('applyPostId').value = postId;
+                
+                // Modalni ko'rsatish
+                document.getElementById('postModal').classList.remove('hidden');
+            } catch (error) {
+                console.error('Xatolik:', error);
+                showMessage('Postni yuklab bo\'lmadi', 'error');
+            }
+        }
+        
+        // Like qo'shish
+        document.getElementById('likeButton').addEventListener('click', async function() {
+            if (!currentPostId) return;
+            
+            try {
+                const response = await fetch(`/api/posts/${currentPostId}/like`, {
+                    method: 'POST'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('likeCount').textContent = result.likes;
+                }
+            } catch (error) {
+                console.error('Xatolik:', error);
             }
         });
-
-        // Formani yuborish
-        document.getElementById('studentForm').addEventListener('submit', async function(e) {
+        
+        // Comment qo'shish
+        document.getElementById('commentForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const submitButton = document.getElementById('submitButton');
-            submitButton.disabled = true;
-            submitButton.textContent = 'Yuborilmoqda...';
+            if (!currentPostId) return;
+            
+            const name = document.getElementById('commentName').value;
+            const text = document.getElementById('commentText').value;
+            
+            if (!name || !text) return;
+            
+            try {
+                const response = await fetch(`/api/posts/${currentPostId}/comment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, text })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('commentName').value = '';
+                    document.getElementById('commentText').value = '';
+                    document.getElementById('commentCount').textContent = result.comments.length;
+                    
+                    // Yangi commentni qo'shish
+                    const commentsContainer = document.getElementById('commentsContainer');
+                    const newComment = result.comments[result.comments.length - 1];
+                    
+                    const commentElement = document.createElement('div');
+                    commentElement.className = 'bg-gray-100 p-3 rounded-lg mb-2';
+                    commentElement.innerHTML = `
+                        <p class="font-semibold">${newComment.name}</p>
+                        <p class="text-gray-700">${newComment.text}</p>
+                        <p class="text-gray-500 text-xs mt-1">${new Date(newComment.createdAt).toLocaleDateString()}</p>
+                    `;
+                    
+                    if (commentsContainer.querySelector('.text-center')) {
+                        commentsContainer.innerHTML = '';
+                    }
+                    
+                    commentsContainer.appendChild(commentElement);
+                }
+            } catch (error) {
+                console.error('Xatolik:', error);
+            }
+        });
+        
+        // Apply now tugmasi
+        document.getElementById('applyButton').addEventListener('click', function() {
+            document.getElementById('applicationModal').classList.remove('hidden');
+        });
+        
+        // Ariza formasi
+        document.getElementById('applicationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!currentPostId) return;
             
             const formData = new FormData(this);
             
             try {
-                const response = await fetch('/submit-student', {
+                const response = await fetch(`/api/posts/${currentPostId}/apply`, {
                     method: 'POST',
                     body: formData
                 });
@@ -335,21 +367,27 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    showMessage('Ma\'lumotlar muvaffaqiyatli saqlandi!', 'success');
+                    showMessage('Arizangiz muvaffaqiyatli yuborildi!', 'success');
                     this.reset();
-                    document.getElementById('photoPreview').classList.add('hidden');
+                    document.getElementById('applicationModal').classList.add('hidden');
                 } else {
                     showMessage('Xatolik: ' + result.message, 'error');
                 }
             } catch (error) {
                 showMessage('Xatolik: Serverga ulanib bo\'lmadi', 'error');
                 console.error('Xatolik:', error);
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Ma\'lumotlarni Yuborish';
             }
         });
-
+        
+        // Modalni yopish
+        document.getElementById('closePostModal').addEventListener('click', function() {
+            document.getElementById('postModal').classList.add('hidden');
+        });
+        
+        document.getElementById('closeApplicationModal').addEventListener('click', function() {
+            document.getElementById('applicationModal').classList.add('hidden');
+        });
+        
         // Xabarlarni ko'rsatish
         function showMessage(message, type) {
             const messageBox = document.getElementById('messageBox');

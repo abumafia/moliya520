@@ -12,7 +12,37 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://apl:apl00@gamepayment
   useUnifiedTopology: true
 });
 
-// Talaba modeli
+// Yangi Post modeli (sport to'garaklari uchun)
+const postSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  image: { type: String },
+  createdAt: { type: Date, default: Date.now },
+  likes: { type: Number, default: 0 },
+  comments: [{
+    name: { type: String, required: true },
+    text: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now }
+  }],
+  applications: [{
+    // Talaba ma'lumotlari
+    photo: { type: String, required: true },
+    fullName: { type: String, required: true },
+    birthDate: { type: Date, required: true },
+    idNumber: { type: String, required: true },
+    jshrNumber: { type: String, required: true },
+    // Qo'shimcha ma'lumotlar
+    phone: { type: String, required: true },
+    address: { type: String },
+    experience: { type: String },
+    achievements: { type: String },
+    createdAt: { type: Date, default: Date.now }
+  }]
+});
+
+const Post = mongoose.model('Post', postSchema);
+
+// Talaba modeli (asosiy talabalar ro'yxati uchun)
 const studentSchema = new mongoose.Schema({
   // Shaxsiy ma'lumotlar
   lastName: { type: String, required: true },
@@ -21,6 +51,10 @@ const studentSchema = new mongoose.Schema({
   birthDate: { type: Date, required: true },
   permanentAddress: { type: String, required: true },
   temporaryAddress: { type: String },
+  
+  // Ota-ona ma'lumotlari
+  fatherName: { type: String },
+  motherName: { type: String },
   
   // To'lov va identifikatsiya
   paymentType: { type: String, required: true },
@@ -32,10 +66,8 @@ const studentSchema = new mongoose.Schema({
   
   // Aloqa ma'lumotlari
   studentPhone: { type: String, required: true },
-    fatherName: { type: String }, // Yangi: Otasining ismi
   fatherPhone: { type: String },
   fatherJob: { type: String },
-    motherName: { type: String }, // Yangi: Onasining ismi
   motherPhone: { type: String },
   motherJob: { type: String },
   
@@ -96,14 +128,24 @@ const upload = multer({
   }
 });
 
-// Asosiy sahifa
+// Asosiy sahifa (sport to'garaklari)
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Admin sahifasi
+// Talabalar ro'yxati sahifasi
+app.get('/students', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'students.html'));
+});
+
+// Admin sahifasi (sport to'garaklari boshqaruvi)
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+// Talabalar admin sahifasi
+app.get('/students-admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'students-admin.html'));
 });
 
 // Talaba ma'lumotlarini qabul qilish
@@ -165,6 +207,162 @@ app.get('/api/students/:id', async (req, res) => {
   } catch (error) {
     console.error('Xatolik:', error);
     res.status(500).json({ message: 'Ma\'lumotlarni olishda xatolik' });
+  }
+});
+
+// Talabani o'chirish
+app.delete('/api/students/:id', async (req, res) => {
+  try {
+    const student = await Student.findByIdAndDelete(req.params.id);
+    if (!student) {
+      return res.status(404).json({ message: 'Talaba topilmadi' });
+    }
+    
+    // Rasm faylini o'chirish
+    if (student.photo) {
+      const photoPath = path.join(__dirname, 'public', student.photo);
+      if (fs.existsSync(photoPath)) {
+        fs.unlinkSync(photoPath);
+      }
+    }
+    
+    res.json({ 
+      success: true, 
+      message: 'Talaba ma\'lumotlari muvaffaqiyatli o\'chirildi' 
+    });
+  } catch (error) {
+    console.error('Xatolik:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Talabani o\'chirishda xatolik yuz berdi' 
+    });
+  }
+});
+
+// Yangi post yaratish (sport to'garaklari uchun)
+app.post('/api/posts', upload.single('image'), async (req, res) => {
+  try {
+    const postData = {
+      title: req.body.title,
+      description: req.body.description,
+      image: req.file ? '/uploads/' + req.file.filename : ''
+    };
+    
+    const newPost = new Post(postData);
+    await newPost.save();
+    
+    res.json({ 
+      success: true, 
+      message: 'Post muvaffaqiyatli yaratildi!',
+      postId: newPost._id 
+    });
+  } catch (error) {
+    console.error('Xatolik:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Post yaratishda xatolik yuz berdi' 
+    });
+  }
+});
+
+// Barcha postlarni olish (sport to'garaklari uchun)
+app.get('/api/posts', async (req, res) => {
+  try {
+    const posts = await Post.find().sort({ createdAt: -1 });
+    res.json(posts);
+  } catch (error) {
+    console.error('Xatolik:', error);
+    res.status(500).json({ message: 'Postlarni olishda xatolik' });
+  }
+});
+
+// ID bo'yicha postni olish (sport to'garaklari uchun)
+app.get('/api/posts/:id', async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: 'Post topilmadi' });
+    }
+    res.json(post);
+  } catch (error) {
+    console.error('Xatolik:', error);
+    res.status(500).json({ message: 'Postni olishda xatolik' });
+  }
+});
+
+// Postga like qo'shish (sport to'garaklari uchun)
+app.post('/api/posts/:id/like', async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: 'Post topilmadi' });
+    }
+    
+    post.likes += 1;
+    await post.save();
+    
+    res.json({ success: true, likes: post.likes });
+  } catch (error) {
+    console.error('Xatolik:', error);
+    res.status(500).json({ message: 'Like qo\'shishda xatolik' });
+  }
+});
+
+// Postga comment qo'shish (sport to'garaklari uchun)
+app.post('/api/posts/:id/comment', async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: 'Post topilmadi' });
+    }
+    
+    post.comments.push({
+      name: req.body.name,
+      text: req.body.text
+    });
+    
+    await post.save();
+    
+    res.json({ success: true, comments: post.comments });
+  } catch (error) {
+    console.error('Xatolik:', error);
+    res.status(500).json({ message: 'Comment qo\'shishda xatolik' });
+  }
+});
+
+// Postga ariza qo'shish (sport to'garaklari uchun)
+app.post('/api/posts/:id/apply', upload.single('photo'), async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: 'Post topilmadi' });
+    }
+    
+    const applicationData = {
+      photo: req.file ? '/uploads/' + req.file.filename : '',
+      fullName: req.body.fullName,
+      birthDate: req.body.birthDate,
+      idNumber: req.body.idNumber,
+      jshrNumber: req.body.jshrNumber,
+      phone: req.body.phone,
+      address: req.body.address,
+      experience: req.body.experience,
+      achievements: req.body.achievements
+    };
+    
+    post.applications.push(applicationData);
+    await post.save();
+    
+    res.json({ 
+      success: true, 
+      message: 'Arizangiz muvaffaqiyatli qabul qilindi!'
+    });
+  } catch (error) {
+    console.error('Xatolik:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Ariza yuborishda xatolik yuz berdi' 
+    });
   }
 });
 
